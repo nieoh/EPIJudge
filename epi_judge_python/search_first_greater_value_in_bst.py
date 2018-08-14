@@ -1,8 +1,34 @@
 from test_framework import generic_test
 
+def find_min_value(tree):
+    if tree.left is None:
+        return tree
+    return find_min_value(tree.left)
 
 def find_first_greater_than_k(tree, k):
-    # TODO - you fill in here.
+    if tree is None or tree.data is None:
+        return None
+    if tree.data > k:
+        if tree.left is None:
+            return tree
+        return find_first_greater_than_k(tree.left, k)
+    if tree.data < k:
+        if tree.right is None:
+            if tree.parent is None:
+                return None
+            while tree.parent is not None and tree.parent.data < k:
+                tree = tree.parent
+            return tree.parent
+        return find_first_greater_than_k(tree.right, k)
+    if tree.data == k:
+        if tree.right is None:
+            if tree.parent is None:
+                return None
+            while tree.parent is not None and tree.parent.data < k:
+                tree = tree.parent
+            return tree.parent
+        return find_min_value(tree.right)
+    
     return None
 
 
