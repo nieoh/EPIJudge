@@ -2,8 +2,18 @@ from test_framework import generic_test, test_utils
 
 
 def find_k_largest_in_bst(tree, k):
-    # TODO - you fill in here.
-    return None
+    if tree is None:
+        return []
+    ret = []
+    
+    ret += find_k_largest_in_bst(tree.right, k)
+    if len(ret) < k:
+        ret.append(tree.data)
+    if len(ret) < k:
+        ret += find_k_largest_in_bst(tree.left, k-len(ret))
+    
+    
+    return ret
 
 
 if __name__ == '__main__':
