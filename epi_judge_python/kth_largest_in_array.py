@@ -6,7 +6,10 @@ from test_framework import generic_test
 # find_kth_largest(3, A) returns 1, and find_kth_largest(4, A) returns -1.
 def find_kth_largest(k, A):
     # TODO - you fill in here.
-    return 0
+    A = sorted(A)
+    
+
+    return A[-k]
 
 
 if __name__ == '__main__':
