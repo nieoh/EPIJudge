@@ -6,12 +6,30 @@ from test_framework.test_utils import enable_executor_hook
 
 Endpoint = collections.namedtuple('Endpoint', ('is_closed', 'val'))
 
-Interval = collections.namedtuple('Interval', ('left', 'right'))
+#Interval = collections.namedtuple('Interval', ('left', 'right'))
 
+class Interval:
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
 
+    def __lt__(self, other):
+        if self.left.val != other.left.val:
+            return self.left.val < other.left.val
+        return self.left.is_closed and not other.left.is_closed
+
+        
 def union_of_intervals(intervals):
-    # TODO - you fill in here.
-    return []
+    intervals.sort()
+    ret = [intervals[0]]
+    for interval in intervals:
+        if (interval.left.val > ret[-1].right.val) or (interval.left.val == ret[-1].right.val and not interval.left.is_closed and not ret[-1].right.is_closed):
+            ret.append(interval)
+        elif interval.right.val > ret[-1].right.val:
+            ret[-1].right = interval.right
+        elif interval.right.val == ret[-1].right.val:
+            ret[-1].right = Endpoint((ret[-1].right.is_closed or interval.right.is_closed), ret[-1].right.val)
+    return ret
 
 
 @enable_executor_hook
