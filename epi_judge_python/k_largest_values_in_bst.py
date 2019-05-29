@@ -1,25 +1,28 @@
 from test_framework import generic_test, test_utils
 
-def reverse_order_traversal(tree):
-    if tree is None:
+def reverse_traversal(tree):
+    if not tree:
         return []
 
-    r = reverse_order_traversal(tree.right)
-    for node in r:
-        yield node
-    yield tree
-    l = reverse_order_traversal(tree.left)
-    for node in l:
-        yield node
+    for x in reverse_traversal(tree.right):
+        yield x
+
+    yield tree.data
+
+    for y in reverse_traversal(tree.left):
+        yield y
+
 
 def find_k_largest_in_bst(tree, k):
-    ret = [] 
-    for node in reverse_order_traversal(tree):
+    ret = []
+
+    for node in reverse_traversal(tree):
         if node:
-            ret.append(node.data)
+            ret.append(node)
         k -= 1
-        if 0 == k:
+        if k == 0:
             break
+
     return ret
 
 
