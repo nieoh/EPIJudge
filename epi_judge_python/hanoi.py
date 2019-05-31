@@ -9,8 +9,16 @@ NUM_PEGS = 3
 
 def compute_tower_hanoi(num_rings):
     # TODO - you fill in here.
-    return []
-
+    def move(n, Start, End, Spare):
+        if n==0:
+            return []
+        if n==1:
+            return [[Start, End]]
+        a = move(n-1, Start, Spare, End)
+        b = [[Start, End]]
+        c = move(n-1, Spare, End, Start)
+        return a + b + c
+    return move(num_rings, 0, 2, 1)
 
 @enable_executor_hook
 def compute_tower_hanoi_wrapper(executor, num_rings):
