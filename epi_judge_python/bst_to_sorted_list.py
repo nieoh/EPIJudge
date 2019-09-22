@@ -9,20 +9,14 @@ def bst_to_doubly_linked_list(tree):
     def helper(tree):
         if not tree:
             return None, None
-        l = DoublyListNode(tree.data)
-        first = last = l
-        F, l.prev = helper(tree.left)
-        if l.prev:
-            l.prev.next = l
-        if F:
-            first = F
-        l.next , L = helper(tree.right)
-        if l.next:
-            l.next.prev = l
-        if L:
-            last = L
-
-        return first, last
+        first = last = tree
+        F, tree.left = helper(tree.left)
+        tree.right , L = helper(tree.right)
+        if tree.left:
+            tree.left.right = tree
+        if tree.right:
+            tree.right.left = tree
+        return F or first, L or last
 
     head, _ = helper(tree)
     return head
@@ -30,16 +24,16 @@ def bst_to_doubly_linked_list(tree):
 @enable_executor_hook
 def bst_to_doubly_linked_list_wrapper(executor, tree):
     l = executor.run(functools.partial(bst_to_doubly_linked_list, tree))
-    if l is not None and l.prev is not None:
+    if l is not None and l.left is not None:
         raise TestFailure(
             'Function must return the head of the list. Left link must be None'
         )
     v = []
     while l:
         v.append(l.data)
-        if l.next and l.next.prev is not l:
+        if l.right and l.right.left is not l:
             raise TestFailure('List is ill-formed')
-        l = l.next
+        l = l.right
     return v
 
 
